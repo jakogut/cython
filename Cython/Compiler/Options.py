@@ -211,6 +211,7 @@ _directive_defaults = {
     'old_style_globals': False,
     'np_pythran': False,
     'fast_gil': False,
+    'embed': False,
 
     # set __file__ and/or __path__ to known source/target path at import time (instead of not having them available)
     'set_initial_path' : None,  # SOURCEFILE or "/full/path/to/module"
@@ -298,6 +299,9 @@ def normalise_encoding_name(option_name, encoding):
     return encoding
 
 
+def normalise_embed(option_name, value):
+    return value if isinstance(value, (str, bool)) else False
+
 # Override types possibilities above, if needed
 directive_types = {
     'language_level': str,  # values can be None/2/3/'3str', where None == 2+warning
@@ -321,7 +325,7 @@ directive_types = {
     'freelist': int,
     'c_string_type': one_of('bytes', 'bytearray', 'str', 'unicode'),
     'c_string_encoding': normalise_encoding_name,
-    'trashcan': bool,
+    'embed': normalise_embed),
 }
 
 for key, val in _directive_defaults.items():
@@ -364,7 +368,7 @@ directive_scopes = {  # defaults to available everywhere
     'np_pythran': ('module',),
     'fast_gil': ('module',),
     'iterable_coroutine': ('module', 'function'),
-    'trashcan' : ('cclass',),
+    'embed': ('module',)
 }
 
 
